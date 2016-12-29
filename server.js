@@ -5,7 +5,7 @@ var morgan         = require('morgan');             // log requests to the conso
 var bodyParser     = require('body-parser');    // pull information from HTML POST (express4)
 var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
 
-require('dotenv').config();
+(require('dotenv').config({ silent: process.env.NODE_ENV === 'production' }));
 
 // Put a database connection under var 'database' in .env file
 mongoose.connect(process.env.database);
@@ -52,7 +52,6 @@ app.get('/api/todos', function(req, res) {
 });
 
 app.post('/api/todos', function(req, res) {
-	console.log(req.body.text);
 	// Create a new Todo
 	// Uses AJAX request from Angular
 	// Model.create is same as 'new' and then .save()
