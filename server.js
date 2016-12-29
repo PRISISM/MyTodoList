@@ -5,7 +5,9 @@ var morgan         = require('morgan');             // log requests to the conso
 var bodyParser     = require('body-parser');    // pull information from HTML POST (express4)
 var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
 
-(require('dotenv').config({ silent: process.env.NODE_ENV === 'production' }));
+if ((process.env.NODE_ENV || 'development') === 'development') {
+  require('dotenv').load();
+} 
 
 // Put a database connection under var 'database' in .env file
 mongoose.connect(process.env.database);
