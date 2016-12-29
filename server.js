@@ -85,7 +85,7 @@ app.delete('api/todos/:todo_id', function(req, res) {
 
 // Catch-all Route
 app.get('*',function(req,res) {
-    res.sendFile('./public/index.html');
+    res.sendFile('./public/index.html', {root : __dirname});
 });
 
 // listen (start app with node server.js) 

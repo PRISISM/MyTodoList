@@ -22,35 +22,33 @@ myTodoModule.controller('MainController', function($http) {
 
 	// when landing on page, get all todos and show them
 	$http.get('/api/todos')
-		.success(function(data) {
+		.then(function successCallback(data) {
 			vm.todos = data;
 			console.log(data);
-		})
-		.error(function(data) {
+		}, function errorCallback(data) {
 			console.log('Error: ' + data);
 		});
 
 	// when submitting add, send to node API
 	vm.createTodo = function() {
 		$http.post('/api/todos/', vm.formData)
-			.success(function(data) {
+			.then(function successCallback(data) {
 				vm.formData = {}; // clear the form
 				vm.todos = data;
 				console.log(data);
-			})
-			.error(function(data) {
-				console.log('Error ' + data);
+			}, function errorCallback(data) {
+				console.log('Error: ' + data);
 			});
 	};
 
 	vm.deleteTodo = function(id) {
 		$http.delete('/api/todos/' + id)
-			.success(function(data) {
+			.then(function successCallback(data) {
 				vm.todos = data;
 				console.log(data);
-			})
-			.error(function(data){
-				console.log('Error ' + data);
+			}, function errorCallback(data) {
+				console.log('Error: ' + data);
 			});
-	};
+
+		};
 });
