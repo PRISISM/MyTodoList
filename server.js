@@ -10,6 +10,16 @@ require('dotenv').config();
 // Put a database connection under var 'database' in .env file
 mongoose.connect(process.env.database);
 
+// On successful connection
+mongoose.connection.on('connected', function () {  
+  console.log('Mongoose default connection open to ' + process.env.database);
+}); 
+
+// If the connection throws an error
+mongoose.connection.on('error',function (err) {  
+  console.log('Mongoose default connection error: ' + err);
+}); 
+
 // Define our model -- in larger scale app separate to app/models 
 var Todo = mongoose.model('Todo', {
 	// Schema
