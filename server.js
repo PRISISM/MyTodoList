@@ -22,16 +22,6 @@ mongoose.connection.on('error',function (err) {
   console.log('Mongoose default connection error: ' + err);
 }); 
 
-// Define our model -- in larger scale app separate to app/models 
-var Todo = mongoose.model('Todo', {
-	// Schema
-	text : {
-		type: String,
-		default: ''
-	},
-	done : Boolean
-});
-
 app.use(express.static(__dirname + '/public'));                 // set the static files location /public/img will be /img for users
 app.use(morgan('dev'));                                         // log every request to the console
 app.use(bodyParser.urlencoded({'extended' : 'true'}));          // parse application/x-www-form-urlencoded
@@ -40,69 +30,7 @@ app.use(bodyParser.json({ type : 'application/vnd.api+json' }));// parse applica
 app.use(methodOverride());
 
 // Routes
-
-app.get('/api/todos', function(req, res) {
-	// Find all todos
-	Todo.find(function(err, todos) {
-			if (err) {
-				res.send(err);
-				return;
-			}
-
-		res.json(todos);
-	});
-});
-
-app.post('/api/todos', function(req, res) {
-	// Create a new Todo
-	// Uses AJAX request from Angular
-	// Model.create is same as 'new' and then .save()
-	Todo.create({
-		text : req.body.text,
-		done: false
-	}, function(err, todo) {
-			if (err) {
-				res.send(err);
-				return;
-			}
-
-		// get all todos after creating another
-		Todo.find(function(err, todos) {
-			if (err) {
-				res.send(err);
-				return;
-			}
-			res.json(todos);
-			
-		});
-	});
-
-});
-
-app.delete('/api/todos/:todo_id', function(req, res) {
-	Todo.remove({
-		_id : req.params.todo_id
-	}, function(err, todo) {
-			if (err) {
-				res.send(err);
-				return;
-			}
-
-		// get all todos after removing
-		Todo.find(function(err, todos) {
-			if (err) {
-				res.send(err);
-				return;
-			}
-			res.json(todos);
-		});
-	});
-});
-
-// Catch-all Route
-app.get('*',function(req,res) {
-    res.sendFile('./public/index.html', {root : __dirname});
-});
+require('./app/routes')(app);
 
 // listen (start app with node server.js) 
 var server = app.listen(process.env.PORT || 8080, function(){
