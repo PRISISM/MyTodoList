@@ -105,8 +105,8 @@ app.get('*',function(req,res) {
 });
 
 // listen (start app with node server.js) 
-app.listen(process.env.PORT);
-
-console.log("App listening on port", process.env.PORT);
-
+var server = app.listen(process.env.PORT || 8080, function(){
+  var port = server.address().port;
+  console.log('App listening at port', port);
+});
 
