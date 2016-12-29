@@ -23,7 +23,11 @@ mongoose.connection.on('error',function (err) {
 // Define our model -- in larger scale app separate to app/models 
 var Todo = mongoose.model('Todo', {
 	// Schema
-	text : String
+	text : {
+		type: String,
+		default: ''
+	},
+	done : Boolean
 });
 
 app.use(express.static(__dirname + '/public'));                 // set the static files location /public/img will be /img for users
@@ -38,14 +42,17 @@ app.use(methodOverride());
 app.get('/api/todos', function(req, res) {
 	// Find all todos
 	Todo.find(function(err, todos) {
-		if (err)
-			res.send(err);
+			if (err) {
+				res.send(err);
+				return;
+			}
 
 		res.json(todos);
 	});
 });
 
 app.post('/api/todos', function(req, res) {
+	console.log(req.body.text);
 	// Create a new Todo
 	// Uses AJAX request from Angular
 	// Model.create is same as 'new' and then .save()
@@ -53,13 +60,17 @@ app.post('/api/todos', function(req, res) {
 		text : req.body.text,
 		done: false
 	}, function(err, todo) {
-		if (err)
-			res.send(err);
+			if (err) {
+				res.send(err);
+				return;
+			}
 
 		// get all todos after creating another
 		Todo.find(function(err, todos) {
-			if (err) 
+			if (err) {
 				res.send(err);
+				return;
+			}
 			res.json(todos);
 			
 		});
@@ -67,17 +78,21 @@ app.post('/api/todos', function(req, res) {
 
 });
 
-app.delete('api/todos/:todo_id', function(req, res) {
+app.delete('/api/todos/:todo_id', function(req, res) {
 	Todo.remove({
 		_id : req.params.todo_id
 	}, function(err, todo) {
-		if (err)
-			res.send(err);
+			if (err) {
+				res.send(err);
+				return;
+			}
 
 		// get all todos after removing
 		Todo.find(function(err, todos) {
-			if (err)
+			if (err) {
 				res.send(err);
+				return;
+			}
 			res.json(todos);
 		});
 	});

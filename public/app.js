@@ -31,7 +31,12 @@ myTodoModule.controller('MainController', function($http) {
 
 	// when submitting add, send to node API
 	vm.createTodo = function() {
-		$http.post('/api/todos/', vm.formData)
+		console.log('Creating', vm.formData);
+		$http({
+				url: '/api/todos/',
+				method: 'POST',
+				data: vm.formData
+			})
 			.then(function successCallback(data) {
 				vm.formData = {}; // clear the form
 				vm.todos = data;
@@ -39,6 +44,7 @@ myTodoModule.controller('MainController', function($http) {
 			}, function errorCallback(data) {
 				console.log('Error: ' + data);
 			});
+
 	};
 
 	vm.deleteTodo = function(id) {
@@ -50,5 +56,5 @@ myTodoModule.controller('MainController', function($http) {
 				console.log('Error: ' + data);
 			});
 
-		};
+	};
 });
