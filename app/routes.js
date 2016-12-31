@@ -73,7 +73,7 @@ module.exports = function(app) {
 
 	app.post('/api/register', ctrlAuth.register);
 	app.post('/api/login', ctrlAuth.login);
-
+	
 	// Catch-all Route
 	app.get('*', function(req, res) {
 		res.sendFile(path.resolve(__dirname + '/../public/index.html'));

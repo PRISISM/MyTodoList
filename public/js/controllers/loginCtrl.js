@@ -20,13 +20,17 @@
         //   alert(err);
         // })
         .then(function(){
-          $location.path('profile');
+    		$location.path('home');
+
         });
     };
 
     vm.logout = function() {
     	authentication
-    	.logout();
+    	.logout()
+    	.then(function() {
+    		$location.path('home');
+    	});
     };
 
   }

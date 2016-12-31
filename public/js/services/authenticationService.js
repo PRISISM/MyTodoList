@@ -23,10 +23,10 @@
 
 		var isLoggedIn = function() {
 			var token = getToken();
-			console.log($window.localStorage);
+			console.log($window.localStorage, token);
 			var payload;
 
-			if (token != 'undefined') {
+			if (token) {
 
 				payload = token.split('.')[1];
 				payload = $window.atob(payload);
@@ -54,7 +54,9 @@
 
 		register = function(user) {
 			return $http.post('/api/register', user).then(function successCallback(data) {
-				saveToken(data.token);
+				saveToken(data.data.token);
+				$window.location.reload();
+
 			}, function errorCallback(data) {
 				console.log('Error: ' + data);
 			});
@@ -64,6 +66,7 @@
 			return $http.post('/api/login', user).then(function successCallback(data) {
 				console.log(data);
 				saveToken(data.data.token);
+				$window.location.reload();
 			}, function errorCallback(data) {
 				console.log('Error ' + data);
 			});
@@ -72,6 +75,7 @@
 
 		logout = function() {
 			$window.localStorage.removeItem('mean-token');
+			$window.location.reload();
 		};
 
 		return {

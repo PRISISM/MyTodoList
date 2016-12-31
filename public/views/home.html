@@ -6,18 +6,31 @@
 
 	<!-- TODO LIST -->
 	<div id="todo-list" class="row">
-		<div class="col-sm-4 col-sm-offset-4">
-
+<!-- 		<div class="col-sm-4 col-sm-offset-4">
+ -->
 			<!-- Loop over Todos in vm.todos -->
-			<div class="checkbox" ng-repeat="todo in main.todos.data">
-				<label>
-					<input type="checkbox" ng-click="main.deleteTodo(todo._id)"> 
-					<p ng-bind="todo.text">
-				</label>
-			</div>
+			<ul class="list-group">
+				<li class="list-group-item" ng-repeat="todo in main.todos.data">
+					<h4 ng-bind="todo.text"></h4>
+					<a class= 'btn btn-success' ng-click="main.deleteTodo(todo._id)">Complete</a>
 
-		</div>
-	</div>
+				</li>
+
+<!-- 
+				<div class="checkbox" ng-repeat="todo in main.todos.data">
+					<li class="list-group-item">
+						<input type="checkbox" ng-click="main.deleteTodo(todo._id)"> 
+						<p ng-bind="todo.text">
+
+					</li>
+					<label>
+						<input type="checkbox" ng-click="main.deleteTodo(todo._id)"> 
+						<p ng-bind="todo.text">
+					</label>
+				</div> -->
+			</ul>
+<!-- 		</div>
+ -->	</div>
 
 	<!-- TODO FORM -->
 	<div id="todo-form" class="row">
