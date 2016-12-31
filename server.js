@@ -4,6 +4,7 @@ var mongoose       = require('mongoose');
 var morgan         = require('morgan');             // log requests to the console (express4)
 var bodyParser     = require('body-parser');    // pull information from HTML POST (express4)
 var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
+var passport       = require('passport');
 
 if ((process.env.NODE_ENV || 'development') === 'development') {
   require('dotenv').load();
@@ -29,8 +30,12 @@ app.use(bodyParser.json());                                     // parse applica
 app.use(bodyParser.json({ type : 'application/vnd.api+json' }));// parse application/vnd.api+json as json
 app.use(methodOverride());
 
-// Routes
+// Routes and Passport
 require('./app/routes')(app);
+require('./app/models/User');
+require('./app/passport');
+
+app.use(passport.initialize());
 
 // listen (start app with node server.js) 
 var server = app.listen(process.env.PORT || 8080, function(){

@@ -1,4 +1,14 @@
 var Todo = require('./models/Todo');
+var path = require('path');
+var jwt = require('express-jwt');
+var auth = jwt({
+	secret: process.env.secret,
+	userProperty: 'payload'
+});
+
+var ctrlAuth = require('./controllers/authentication');
+var ctrlProfile = require('./controllers/profile');
+
 
 module.exports = function(app) {
 
@@ -59,11 +69,13 @@ module.exports = function(app) {
 			});
 		});
 	});
+	app.get('/profile', auth, ctrlProfile.profileRead);
+
+	app.post('/api/register', ctrlAuth.register);
+	app.post('/api/login', ctrlAuth.login);
 
 	// Catch-all Route
 	app.get('*', function(req, res) {
-		res.sendFile('./public/index.html', {
-			root: __dirname
-		});
+		res.sendFile(path.resolve(__dirname + '/../public/index.html'));
 	});
 };

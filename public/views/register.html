@@ -1,0 +1,23 @@
+<div class="container">
+
+	<h1 class="page-header">
+		Register
+		<small>Sign up now!</small>
+	</h1>
+
+<form ng-submit="vm.onSubmit()">
+  <div class="form-group">
+    <label for="name">Full name</label>
+    <input type="text" class="form-control" id="name" placeholder="Enter your name" ng-model="vm.credentials.name">
+  </div>
+  <div class="form-group">
+    <label for="username">Username</label>
+    <input type="text" class="form-control" id="username" placeholder="Enter username" ng-model="vm.credentials.username">
+  </div>
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" class="form-control" id="password" placeholder="Password" ng-model="vm.credentials.password">
+  </div>
+  <button type="submit" class="btn btn-default">Register!</button>
+</form>
+</div>

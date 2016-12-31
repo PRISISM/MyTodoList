@@ -1,0 +1,40 @@
+<div class="container">
+	<div class="jumbotron text-center">
+		<h1>I have <span class= "label label-info" ng-bind="main.todos.data.length"></span>
+		{{main.todos.data.length === 1 ? 'thing to do.' : 'things to do.' }}</h1>
+	</div>
+
+	<!-- TODO LIST -->
+	<div id="todo-list" class="row">
+		<div class="col-sm-4 col-sm-offset-4">
+
+			<!-- Loop over Todos in vm.todos -->
+			<div class="checkbox" ng-repeat="todo in main.todos.data">
+				<label>
+					<input type="checkbox" ng-click="main.deleteTodo(todo._id)"> 
+					<p ng-bind="todo.text">
+				</label>
+			</div>
+
+		</div>
+	</div>
+
+	<!-- TODO FORM -->
+	<div id="todo-form" class="row">
+		<div class="col-sm-8 col-sm-offset-2 text-center">
+			<form>
+				<div class="form-group">
+					<input type="text" class="form-control input-lg text-center" placeholder="I want to defeat Airman" ng-model="main.formData.text">
+
+				</div>
+
+				<button type="submit" class="btn btn-primary btn-lg" ng-click="main.createTodo()">Add</button>
+
+			</form>
+			
+		</div>
+		
+
+	</div>
+
+</div>
