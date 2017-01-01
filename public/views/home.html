@@ -1,7 +1,12 @@
-<div class="container">
-	<div class="jumbotron text-center">
-		<h1>I have <span class= "label label-info" ng-bind="main.todos.data.length"></span>
+<div class="container" ng-controller="navigationCtrl as nv">
+	<div ng-show="nv.isLoggedIn" class="jumbotron text-center">
+		<h1>You have <span class= "label label-info" ng-bind="main.todos.data.length"></span>
 		{{main.todos.data.length === 1 ? 'thing to do.' : 'things to do.' }}</h1>
+	</div>
+
+	<div ng-hide="nv.isLoggedIn" class="jumbotron text-center">
+		<h1>Welcome to MyTodoList!</h1>
+		<h6 class="lead">Please log in or register to continue.</h6>
 	</div>
 
 	<!-- TODO LIST -->
@@ -21,15 +26,18 @@
 	</div>
 
 	<!-- TODO FORM -->
-	<div id="todo-form" class="row">
+	<div id="todo-form" class="row" ng-submit="main.createTodo()">
 		<div class="col-sm-8 col-sm-offset-2 text-center">
 			<form>
 				<div class="form-group">
-					<input type="text" class="form-control input-lg text-center" placeholder="I want to defeat Airman" ng-model="main.formData.text">
+					<input ng-show="nv.isLoggedIn" type="text" class="form-control input-lg text-center" placeholder="I want to defeat Airman" ng-model="main.formData.text">
+					<input ng-hide="nv.isLoggedIn" type="text" class="form-control input-lg text-center disabled" placeholder="I want to defeat Airman">
+
 
 				</div>
 
-				<button type="submit" class="btn btn-primary btn-lg" ng-click="main.createTodo()">Add</button>
+            	<button ng-hide="nv.isLoggedIn" class="btn btn-primary btn-lg disabled">Login to Add</button>
+				<button ng-show="nv.isLoggedIn" type="submit" class="btn btn-primary btn-lg" ng-click="main.createTodo()">Add</button>
 
 			</form>
 			

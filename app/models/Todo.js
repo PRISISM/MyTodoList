@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var User = require('./User');
 
 module.exports = mongoose.model('Todo', {
 	// Schema
@@ -6,5 +7,9 @@ module.exports = mongoose.model('Todo', {
 		type: String,
 		default: ''
 	},
-	done : Boolean
+	done : Boolean,
+	postedBy: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'User'
+	}
 });

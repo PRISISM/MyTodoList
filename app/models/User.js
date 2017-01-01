@@ -1,6 +1,6 @@
 var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
-var mongoose= require('mongoose');
+var mongoose = require('mongoose');
 
 var userSchema = new mongoose.Schema({
 	username: {
@@ -14,6 +14,9 @@ var userSchema = new mongoose.Schema({
 	},
 	hash: String,
 	salt: String
+	// todos: [todoSchema]
+
+	// Here add Todos?
 
 });
 
@@ -30,14 +33,27 @@ userSchema.methods.validPassword = function(password) {
 // Generates a JWT (think security pass) with the users data
 // exp is the expiry date
 userSchema.methods.generateJwt = function() {
-  var expiry = new Date();
-  expiry.setDate(expiry.getDate() + 7);
+	var expiry = new Date();
+	expiry.setDate(expiry.getDate() + 7);
 
-  return jwt.sign({
-    _id: this._id,
-    username: this.username,
-    name: this.name,
-    exp: parseInt(expiry.getTime() / 1000),
-  }, process.env.secret); };
+	return jwt.sign({
+		_id: this._id,
+		username: this.username,
+		name: this.name,
+		exp: parseInt(expiry.getTime() / 1000),
+	}, process.env.secret);
+};
 
 mongoose.model('User', userSchema);
+
+var todoSchema = new mongoose.Schema({
+	text: {
+		type: String,
+		default: ''
+	},
+	done: Boolean,
+	postedBy: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'User'
+	}
+});

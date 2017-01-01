@@ -1,4 +1,6 @@
 var Todo = require('./models/Todo');
+var User = require('./models/User');
+
 var path = require('path');
 var jwt = require('express-jwt');
 var auth = jwt({
@@ -13,15 +15,17 @@ var ctrlProfile = require('./controllers/profile');
 module.exports = function(app) {
 
 	app.get('/api/todos', function(req, res) {
-		// Find all todos
-		Todo.find(function(err, todos) {
-			if (err) {
-				res.send(err);
-				return;
-			}
+		var userId = req.query.id;
 
-			res.json(todos);
-		});
+		// Get all todos of the current user
+		Todo.find({
+				postedBy: userId
+			})
+			.populate('postedBy')
+			.exec(function(err, posts) {
+				res.json(posts);
+			});
+
 	});
 
 	app.post('/api/todos', function(req, res) {
@@ -30,27 +34,31 @@ module.exports = function(app) {
 		// Model.create is same as 'new' and then .save()
 		Todo.create({
 			text: req.body.text,
-			done: false
+			done: false,
+			postedBy: req.body.id
 		}, function(err, todo) {
 			if (err) {
 				res.send(err);
 				return;
 			}
 
-			// get all todos after creating another
-			Todo.find(function(err, todos) {
-				if (err) {
-					res.send(err);
-					return;
-				}
-				res.json(todos);
+		// Get all todos of the current user
+			Todo.find({
+					postedBy: req.body.id
+				})
+				.populate('postedBy')
+				.exec(function(err, todo) {
+					console.log(JSON.stringify(todo, null, '\t'));
+					res.json(todo);
+				});
 
-			});
 		});
 
 	});
 
 	app.delete('/api/todos/:todo_id', function(req, res) {
+		var userId = req.query.id;
+
 		Todo.remove({
 			_id: req.params.todo_id
 		}, function(err, todo) {
@@ -59,21 +67,22 @@ module.exports = function(app) {
 				return;
 			}
 
-			// get all todos after removing
-			Todo.find(function(err, todos) {
-				if (err) {
-					res.send(err);
-					return;
-				}
-				res.json(todos);
-			});
+			// Get all todos of the current user
+			Todo.find({
+					postedBy: userId
+				})
+				.populate('postedBy')
+				.exec(function(err, todo) {
+					console.log(JSON.stringify(todo, null, '\t'));
+					res.json(todo);
+				});
 		});
 	});
 	app.get('/profile', auth, ctrlProfile.profileRead);
 
 	app.post('/api/register', ctrlAuth.register);
 	app.post('/api/login', ctrlAuth.login);
-	
+
 	// Catch-all Route
 	app.get('*', function(req, res) {
 		res.sendFile(path.resolve(__dirname + '/../public/index.html'));
